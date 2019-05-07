@@ -1,14 +1,39 @@
 package com.example.fboq.weatherappandroid.Model
 
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
+import java.util.*
 
-open class Weather(
+/**
+ * Created by Felix Boquet on 03/05/19
+ *
+ */
 
-    @PrimaryKey var id: Long = 0,
-    var adress: String = "",
-    var date: String? = null,
-    var image: String = "",
+@RealmClass
+open class Weather() : RealmObject() {
+
+    @PrimaryKey
+    var id: Long = UUID.randomUUID().mostSignificantBits
+
+    @SerializedName("timezone")
+    @Expose
+    open var adress: String = ""
+
+    var date: String? = null
+
+    @SerializedName("currently/icon")
+    @Expose
+    var image: String = ""
+
+    @SerializedName("currently/temperature")
+    @Expose
     var temperature: Double = 0.0
 
-) : RealmObject() {}
+    @SerializedName("currently/summary")
+    @Expose
+    var summary: String? = null
+
+}

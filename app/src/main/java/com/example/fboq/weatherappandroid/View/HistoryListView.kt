@@ -55,7 +55,7 @@ class HistoryListView : AppCompatActivity() {
         val retrofit: Retrofit = Retrofit.Builder()
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .baseUrl("https://api.darksky.net/forecast/")
+            .baseUrl("https://api.darksky.net/forecast/f7d5a88bf098e518d6c69bf1e64dc52f/")
             .build()
 
         Realm.init(applicationContext)

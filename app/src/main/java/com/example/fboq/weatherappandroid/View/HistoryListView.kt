@@ -31,7 +31,7 @@ class HistoryListView : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main)
 
         /*val weather: Array<String> = arrayOf("15° ciel bleu", "10° ciel nuageux")
 
@@ -41,6 +41,8 @@ class HistoryListView : AppCompatActivity() {
 
         //val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this,
           //  R.layout.activity_main)
+
+        listView = findViewById(R.id.history_list_view)
 
         val gson = GsonBuilder().setExclusionStrategies(object : ExclusionStrategy {
             override fun shouldSkipField(f: FieldAttributes): Boolean {
@@ -87,7 +89,7 @@ class HistoryListView : AppCompatActivity() {
         //binding.publicRepos.text = "Public Repos: "+ savedUser?.publicRepos
         //    .toString()
 
-        listView = findViewById<ListView>(R.id.history_list_view)
+
         val weatherArray: Array<String> = arrayOf(
             weather.id.toString(),
             weather.temperature.toString(),

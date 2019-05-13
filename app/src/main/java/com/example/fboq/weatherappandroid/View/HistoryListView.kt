@@ -91,11 +91,10 @@ class HistoryListView : AppCompatActivity() {
         //binding.publicRepos.text = "Public Repos: "+ savedUser?.publicRepos
         //    .toString()
 
-        val currently = weather.currently
-
         val weatherArray: Array<String> = arrayOf(
             weather.id.toString(),
-            currently.toString(),
+            weather.currently?.summary.toString(),
+            weather.currently?.temperature.toString(),
             weather.adress
         )
 

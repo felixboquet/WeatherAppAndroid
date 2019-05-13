@@ -24,6 +24,8 @@ open class Weather : RealmObject() {
 
     var date: String? = null
 
+    @SerializedName("currently")
+    @Expose
     open var currently: Currently? = null
 
 }

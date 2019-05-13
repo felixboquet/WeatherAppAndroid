@@ -7,23 +7,22 @@ import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 import java.util.*
 
-/**
- * Created by Felix Boquet on 03/05/19
- *
- */
-
 @RealmClass
-open class Weather : RealmObject() {
+open class Currently: RealmObject() {
 
     @PrimaryKey
     var id: Long = UUID.randomUUID().mostSignificantBits
 
-    @SerializedName("timezone")
+    @SerializedName("icon")
     @Expose
-    open var adress: String = ""
+    var image: String = ""
 
-    var date: String? = null
+    @SerializedName("temperature")
+    @Expose
+    var temperature: Double = 0.0
 
-    open var currently: Currently? = null
+    @SerializedName("summary")
+    @Expose
+    var summary: String? = null
 
 }

@@ -16,9 +16,10 @@ import io.realm.RealmObject
 import retrofit.GsonConverterFactory
 import retrofit.Retrofit
 import retrofit.RxJavaCallAdapterFactory
-import rx.Scheduler
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import io.realm.RealmConfiguration
+
 
 /**
  * Created by Felix Boquet on 03/05/19
@@ -61,7 +62,8 @@ class HistoryListView : AppCompatActivity() {
             .build()
 
         Realm.init(applicationContext)
-        val realm = Realm.getDefaultInstance()
+        val config = RealmConfiguration.Builder().deleteRealmIfMigrationNeeded().build()
+        val realm = Realm.getInstance(config)
 
         val weatherNetworkService: WeatherNetworkService = retrofit.create(
             WeatherNetworkService::class.java)
@@ -89,11 +91,12 @@ class HistoryListView : AppCompatActivity() {
         //binding.publicRepos.text = "Public Repos: "+ savedUser?.publicRepos
         //    .toString()
 
+        val currently = weather.currently
 
         val weatherArray: Array<String> = arrayOf(
             weather.id.toString(),
-            weather.temperature.toString(),
-            weather.summary.toString()
+            currently.toString(),
+            weather.adress
         )
 
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, weatherArray)

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.TextView
 import com.example.fboq.weatherappandroid.Model.Weather
 import com.example.fboq.weatherappandroid.R
 import com.example.fboq.weatherappandroid.Services.Network.WeatherNetworkService
@@ -29,6 +30,8 @@ import io.realm.RealmConfiguration
 class HistoryListView : AppCompatActivity() {
 
     private lateinit var listView: ListView
+    private lateinit var temperatureTextView: TextView
+    private lateinit var summaryTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +47,8 @@ class HistoryListView : AppCompatActivity() {
           //  R.layout.activity_main)
 
         listView = findViewById(R.id.history_list_view)
+        temperatureTextView = findViewById(R.id.temperature_text_view)
+        summaryTextView = findViewById(R.id.summary_text_view)
 
         val gson = GsonBuilder().setExclusionStrategies(object : ExclusionStrategy {
             override fun shouldSkipField(f: FieldAttributes): Boolean {
@@ -91,15 +96,26 @@ class HistoryListView : AppCompatActivity() {
         //binding.publicRepos.text = "Public Repos: "+ savedUser?.publicRepos
         //    .toString()
 
-        val weatherArray: Array<String> = arrayOf(
-            weather.id.toString(),
-            weather.currently?.summary.toString(),
-            weather.currently?.temperature.toString(),
-            weather.adress
-        )
+        if (weather.currently?.temperature != null) {
+            var temp = weather.currently?.temperature
+            if (temp != null) {
+                temp -= 32
+                temp/=1.8
+               /* val weatherArray: Array<String> = arrayOf(
+                    weather.id.toString(),
+                    weather.currently?.summary.toString(),
+                    temp.toString().plus("°C"),
+                    weather.adress
+                )
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, weatherArray)
+                val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, weatherArray)
 
-        listView.adapter = adapter
+                listView.adapter = adapter */
+
+                temperatureTextView.text = temp.toString().plus("°C")
+                summaryTextView.text = weather.currently?.summary.toString()
+            }
+        }
+
     }
 }

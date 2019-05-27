@@ -7,6 +7,7 @@ import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 import java.util.*
 
+
 @RealmClass
 open class Currently: RealmObject() {
 

@@ -7,10 +7,6 @@ import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 import java.util.*
 
-/**
- * Created by Felix Boquet on 03/05/19
- *
- */
 
 @RealmClass
 open class Weather : RealmObject() {

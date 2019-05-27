@@ -5,10 +5,6 @@ import retrofit.http.Path
 import retrofit.http.GET
 import rx.Observable
 
-/**
- * Created by Felix Boquet on 07/05/19
- *
- */
 
 interface WeatherNetworkService {
     @GET("{lat},{long}")

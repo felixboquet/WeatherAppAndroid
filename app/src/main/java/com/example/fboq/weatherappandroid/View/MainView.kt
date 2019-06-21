@@ -1,15 +1,23 @@
 package com.example.fboq.weatherappandroid.view
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
-import com.example.fboq.weatherappandroid.Model.Weather
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import com.example.fboq.weatherappandroid.model.Weather
 import com.example.fboq.weatherappandroid.R
-import com.example.fboq.weatherappandroid.Services.Network.WeatherNetworkService
-import com.example.fboq.weatherappandroid.Utils.BASE_URL
+import com.example.fboq.weatherappandroid.services.network.WeatherNetworkService
+import com.example.fboq.weatherappandroid.utils.BASE_URL
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.gson.ExclusionStrategy
 import com.google.gson.FieldAttributes
 import com.google.gson.GsonBuilder
@@ -28,6 +36,10 @@ class MainView : AppCompatActivity() {
     private lateinit var temperatureTextView: TextView
     private lateinit var summaryTextView: TextView
     private lateinit var historyButton: Button
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var weatherNetworkService: WeatherNetworkService
+    private lateinit var realm: Realm
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,31 +70,63 @@ class MainView : AppCompatActivity() {
 
         Realm.init(applicationContext)
         val config = RealmConfiguration.Builder().deleteRealmIfMigrationNeeded().build()
-        val realm = Realm.getInstance(config)
+        realm = Realm.getInstance(config)
 
-        val weatherNetworkService: WeatherNetworkService = retrofit.create(
-            WeatherNetworkService::class.java)
+        weatherNetworkService = retrofit.create(WeatherNetworkService::class.java)
 
-        weatherNetworkService.getWeather("43.600000", "1.433333")
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { weather ->
-                    realm.beginTransaction()
-                    realm.copyToRealmOrUpdate(weather)
-                    realm.commitTransaction()
-                    updateViews(weather)
-                },
-                { error ->
-                    Log.e("Error", error.message)
-                }
-            )
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        if (ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+        }else {
+            getLastLocation()
+        }
 
         historyButton.setOnClickListener {
             val intent = Intent(applicationContext, HistoryListView::class.java)
             startActivity(intent)
         }
 
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            LOCATION_PERMISSION_REQUEST_CODE -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    // permission enabled, we get the last location
+                    getLastLocation()
+                } else {
+                    // permission denied, we display a toast
+                    Toast.makeText(this, "Permission denied for getting location", Toast.LENGTH_LONG).show()
+                }
+                return
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getLastLocation() {
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+
+                weatherNetworkService.getWeather(location?.latitude.toString(), location?.longitude.toString())
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                        { weather ->
+                            realm.beginTransaction()
+                            realm.copyToRealmOrUpdate(weather)
+                            realm.commitTransaction()
+                            updateViews(weather)
+                        },
+                        { error ->
+                            Log.e("Error", error.message)
+                        }
+                    )
+            }
     }
 
     private fun updateViews(weather: Weather) {

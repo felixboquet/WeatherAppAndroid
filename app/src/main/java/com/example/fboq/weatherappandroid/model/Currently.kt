@@ -1,4 +1,4 @@
-package com.example.fboq.weatherappandroid.Model
+package com.example.fboq.weatherappandroid.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
@@ -9,19 +9,21 @@ import java.util.*
 
 
 @RealmClass
-open class Weather : RealmObject() {
+open class Currently: RealmObject() {
 
     @PrimaryKey
     var id: Long = UUID.randomUUID().mostSignificantBits
 
-    @SerializedName("timezone")
+    @SerializedName("icon")
     @Expose
-    open var adress: String = ""
+    var image: String = ""
 
-    var date: String? = null
-
-    @SerializedName("currently")
+    @SerializedName("temperature")
     @Expose
-    open var currently: Currently? = null
+    var temperature: Double = 0.0
+
+    @SerializedName("summary")
+    @Expose
+    var summary: String? = null
 
 }

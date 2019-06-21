@@ -45,5 +45,7 @@ dependencies {
     kapt "io.realm:realm-annotations-processor:5.11.0"
     //Viewmodel
     implementation "android.arch.lifecycle:extensions:1.1.1"
+    //Location
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
 
 }

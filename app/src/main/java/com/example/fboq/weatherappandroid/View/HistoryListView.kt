@@ -1,15 +1,18 @@
 package com.example.fboq.weatherappandroid.view
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.fboq.weatherappandroid.R
-
+import com.example.fboq.weatherappandroid.services.application.HistoryApplicationLogic
+import io.realm.Realm
 
 class HistoryListView: AppCompatActivity() {
 
     private lateinit var historyListView: ListView
+    private val realm = Realm.getDefaultInstance()
+    private val applicationLogic = HistoryApplicationLogic()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 

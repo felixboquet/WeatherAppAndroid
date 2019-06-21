@@ -1,6 +1,6 @@
-package com.example.fboq.weatherappandroid.Services.Network
+package com.example.fboq.weatherappandroid.services.network
 
-import com.example.fboq.weatherappandroid.Model.Weather
+import com.example.fboq.weatherappandroid.model.Weather
 import retrofit.http.Path
 import retrofit.http.GET
 import rx.Observable

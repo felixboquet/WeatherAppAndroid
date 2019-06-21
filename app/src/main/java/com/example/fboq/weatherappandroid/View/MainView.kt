@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -16,6 +15,7 @@ import com.example.fboq.weatherappandroid.model.Weather
 import com.example.fboq.weatherappandroid.R
 import com.example.fboq.weatherappandroid.services.network.WeatherNetworkService
 import com.example.fboq.weatherappandroid.utils.BASE_URL
+import com.example.fboq.weatherappandroid.utils.LOCATION_PERMISSION_REQUEST_CODE
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.gson.ExclusionStrategy
@@ -39,7 +39,6 @@ class MainView : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var weatherNetworkService: WeatherNetworkService
     private lateinit var realm: Realm
-    private val LOCATION_PERMISSION_REQUEST_CODE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

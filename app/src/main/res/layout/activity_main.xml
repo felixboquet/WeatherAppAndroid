@@ -29,12 +29,24 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+    <TextView
+            android:id="@+id/city_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10.5dp"
+            android:layout_centerVertical="true"
+            android:text=""
+            app:layout_constraintTop_toBottomOf="@+id/summary_text_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
     <Button
             android:id="@+id/history_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Historique"
-            app:layout_constraintTop_toBottomOf="@+id/summary_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/city_text_view"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toEndOf="parent"/>

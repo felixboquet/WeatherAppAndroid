@@ -3,6 +3,8 @@ package com.example.fboq.weatherappandroid.view
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -29,12 +31,14 @@ import retrofit.RxJavaCallAdapterFactory
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import io.realm.RealmConfiguration
+import java.util.*
 import kotlin.math.round
 
 class MainView : AppCompatActivity() {
 
     private lateinit var temperatureTextView: TextView
     private lateinit var summaryTextView: TextView
+    private lateinit var cityTextView: TextView
     private lateinit var historyButton: Button
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var weatherNetworkService: WeatherNetworkService
@@ -49,6 +53,7 @@ class MainView : AppCompatActivity() {
 
         temperatureTextView = findViewById(R.id.temperature_text_view)
         summaryTextView = findViewById(R.id.summary_text_view)
+        cityTextView = findViewById(R.id.city_text_view)
         historyButton = findViewById(R.id.history_button)
 
         val gson = GsonBuilder().setExclusionStrategies(object : ExclusionStrategy {
@@ -125,7 +130,19 @@ class MainView : AppCompatActivity() {
                             Log.e("Error", error.message)
                         }
                     )
+
+                getCityFromLocation(location?.latitude, location?.longitude)
             }
+    }
+
+    private fun getCityFromLocation(lat: Double?, long: Double?) {
+        val geocoder = Geocoder(this.applicationContext, Locale.getDefault())
+        var addresses: List<Address>
+
+        if (lat != null && long != null) {
+            addresses = geocoder.getFromLocation(lat, long, 1)
+            cityTextView.text = addresses.get(0).locality
+        }
     }
 
     private fun updateViews(weather: Weather) {
